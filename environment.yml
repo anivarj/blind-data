@@ -1,0 +1,9 @@
+name: blind-data
+channels:
+   - conda-forge
+
+dependencies:
+   - pandas
+   - notebook=6.0.3
+
+
