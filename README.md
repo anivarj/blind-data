@@ -1,12 +1,25 @@
 # blind-data
 Blind your .tif files and create a handy key for unscrambling later
 
-test-data images come from https://imagej.net/
+### Note
+* Test-data images come from https://imagej.net/
+* I have only tested this with python 3.7.6
 
-This script requires pandas to be installed with your python installation.
-I have only tested this with python 3.7.6
+## Getting started
+Install git and conda and then run:
+```
+git clone git://github.com/anivarj/blind-data
+cd blind-data
+conda env create
+conda activate blind-data
+```
+This will create an environment called 'blind-data' from the environment.yml file that has the correct packages needed.
+<br>You can then either run the .py file directly using python, or you can run the jupyter notebook file.
+<br>To run the jupyter notebook, run:
+```
+jupyter notebook Blinding.ipynb
+```
 
-I made a .py file because I couldn't figure out how to host this on Jupyter yet, but I will try soon! 
 
 
 
