@@ -33,7 +33,8 @@ os.mkdir(output)
 
 
 # Get full paths to original files 
-origPaths = [] 
+origPaths = [] #future list of paths to all original files
+filenames = [] #future list of file names
 
 #This section gets a list of files inside targetWorkspace and adds the full paths to origPaths list
 for dirpath, dirnames, files in os.walk(targetWorkspace): #walks through targetWorkspace
@@ -41,20 +42,24 @@ for dirpath, dirnames, files in os.walk(targetWorkspace): #walks through targetW
     dirnames = [d for d in dirnames if not d[0] == '.']   #excludes hidden directories in dirnames list
     
     for file in files:                                    
-        origPaths.append(os.path.join(dirpath, file))     #for each file, get the full path to its location
+        filenames.append(file)                            #append each file name to the filenames list
+        origPaths.append(os.path.join(dirpath, file))     #for each file, get the full path to it's location
 
 
 blindedDf = pd.DataFrame(origPaths, columns=["Original Paths"]) #initiate dataFrame with the origPaths list
-
+blindedDf['Original Names'] = pd.DataFrame(filenames)           #add the original filenames list as a new col
 
 #This section creates a randomized 5-character filename for every row of the dataFrame and stores it in randomizedPaths
 randomizedPaths = [] #creates empty list for the randomized paths
+randomizedNames = [] #creates empty list for randomized names
 
 for r in range(0, len(blindedDf)): 
-    randomizedPaths.append(os.path.join(output, ''.join(choice(ascii_uppercase) for i in range(5)) + ".tif")) #makes a full path for the randomized name in the output folder
+    randomName = ''.join(choice(ascii_uppercase) for i in range(5)) + ".tif" #creates randomized file name
+    randomizedPaths.append(os.path.join(output, randomName))                 #makes a full path for the randomized name in the output folder
+    randomizedNames.append(randomName)                                       #adds the randomized name to randomNames list
 
-blindedDf['Randomized Paths'] = pd.DataFrame(randomizedPaths) #appends the list of randomized paths to the current DataFrame
-
+blindedDf['Randomized Paths'] = pd.DataFrame(randomizedPaths)                #appends the list of randomized paths to the current DataFrame
+blindedDf['Randomized Names'] = pd.DataFrame(randomizedNames) #adds a new column for the randomized names
 
 # Blind the data
 
