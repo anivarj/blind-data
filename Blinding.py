@@ -16,38 +16,42 @@ This script assumes you have python3 installed. The order of the script is as fo
 '''
 
 # Import modules and shit
-import os
+import os, sys
 import pandas as pd
 from tkinter.filedialog import askdirectory
 from random import choice
 from string import ascii_uppercase
-from shutil import copyfile
+from shutil import copyfile, rmtree
 
 # Choose your raw data location
 targetWorkspace = askdirectory(initialdir='~/', message='SELECT YOUR DATA LOCATION') 
 
-
 # Create the output folder called 'blinded'
-output = os.path.join(targetWorkspace,'blinded') 
-os.mkdir(output)
+output = os.path.join(targetWorkspace,'blinded')
 
+#check if the output folder already exists, and if so, asks if user wants to overwrite
+if os.path.exists(output):
+    print("There is already an output folder at this location. \n") 
+    val = input("Overwrite? y/n: ")
+    if val == "y":
+        rmtree(output)
+    else: 
+        sys.exit("The output directory will not be deleted. Exiting script...")
 
-# Get full paths to original files 
+#after running the checker, make the output folder
+os.mkdir(output) 
+
+#This section gets a list of files inside targetWorkspace and adds the full paths to origPaths list
 origPaths = [] #future list of paths to all original files
 filenames = [] #future list of file names
 
-#This section gets a list of files inside targetWorkspace and adds the full paths to origPaths list
 for dirpath, dirnames, files in os.walk(targetWorkspace): #walks through targetWorkspace
     files = [f for f in files if not f[0] == '.']         #excludes hidden files in the files list
-    dirnames = [d for d in dirnames if not d[0] == '.']   #excludes hidden directories in dirnames list
+    dirnames[:] = [d for d in dirnames if not d[0] == '.']   #excludes hidden directories in dirnames list
     
     for file in files:                                    
         filenames.append(file)                            #append each file name to the filenames list
         origPaths.append(os.path.join(dirpath, file))     #for each file, get the full path to it's location
-
-
-blindedDf = pd.DataFrame(origPaths, columns=["Original Paths"]) #initiate dataFrame with the origPaths list
-blindedDf['Original Names'] = pd.DataFrame(filenames)           #add the original filenames list as a new col
 
 #This section creates a randomized 5-character filename for every row of the dataFrame and stores it in randomizedPaths
 randomizedPaths = [] #creates empty list for the randomized paths
@@ -58,16 +62,14 @@ for r in range(0, len(blindedDf)):
     randomizedPaths.append(os.path.join(output, randomName))                 #makes a full path for the randomized name in the output folder
     randomizedNames.append(randomName)                                       #adds the randomized name to randomNames list
 
-blindedDf['Randomized Paths'] = pd.DataFrame(randomizedPaths)                #appends the list of randomized paths to the current DataFrame
-blindedDf['Randomized Names'] = pd.DataFrame(randomizedNames) #adds a new column for the randomized names
+# make dataframe
+data = zip(origPaths, filenames, randomizedPaths, randomizedNames) #zip the data lists together into a tuple
+blindedDf = pd.DataFrame(data, columns=["Original Paths", "Original Names", "Randomized Paths", "Randomized Names"]) #initiate dataFrame with the data
+
 
 # Blind the data
-
-newList = list(zip(blindedDf['Original Paths'], blindedDf['Randomized Paths'])) #zipping the two columns from the dataFrame into a list of tuples 
-
-#for each tuple pair, copy the original file to the randomized path
-for orig, randomized in newList:
-    copyfile(orig, randomized)
+# applies the copyfile function to original paths and randomize paths columns over every row
+blindedDf.apply(lambda row: copyfile(row['Original Paths'], row['Randomized Paths']), axis = 1)
 
 # Export the key
 csvPath = os.path.join(output, 'blinded-key.csv') #create a path for the exported dataframe
