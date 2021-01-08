@@ -5,7 +5,7 @@
 Author:Ani Michaud (amichaud3@wisc.edu)
 Description:
 This script should take a folder of .tif files and blind the data by creating a unique, 5-letter code for the file name and renaming the files. 
-This script assumes you have python3 installed. The order of the script is as follows:
+This script assumes you have python3 and pandas installed. The order of the script is as follows:
 * Ask the user where their data is stored (targetWorkspace). It can be in individual sub-folders or just copied into one parent folder
 * Create an output directory called 'blinded'. 
 * Make a list of all the files in the targetWorkspace, and import them into a pandas DataFrame
