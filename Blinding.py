@@ -3,7 +3,6 @@
 
 '''
 Author:Ani Michaud (amichaud3@wisc.edu)
-
 Description:
 This script should take a folder of .tif files and blind the data by creating a unique, 5-letter code for the file name and renaming the files. 
 This script assumes you have python3 installed. The order of the script is as follows:
@@ -24,7 +23,7 @@ from string import ascii_uppercase
 from shutil import copyfile
 
 # Choose your raw data location
-targetWorkspace = askdirectory(initialdir='~/', message='SELECT YOUR DATA LOCATION') 
+targetWorkspace = askdirectory(initialdir=os.path.join("~", os.path.sep), message='SELECT YOUR DATA LOCATION') 
 
 
 # Create the output folder called 'blinded'
@@ -44,7 +43,7 @@ for dirpath, dirnames, files in os.walk(targetWorkspace): #walks through targetW
         origPaths.append(os.path.join(dirpath, file))     #for each file, get the full path to its location
 
 
-blindedDf = pd.DataFrame(origPaths, columns=["Original Paths"]) #initiate dataFrame with the origPaths list
+blindedDf = pd.DataFrame(origPaths, columns=["Original_Paths"]) #initiate dataFrame with the origPaths list
 
 
 #This section creates a randomized 5-character filename for every row of the dataFrame and stores it in randomizedPaths
@@ -53,16 +52,14 @@ randomizedPaths = [] #creates empty list for the randomized paths
 for r in range(0, len(blindedDf)): 
     randomizedPaths.append(os.path.join(output, ''.join(choice(ascii_uppercase) for i in range(5)) + ".tif")) #makes a full path for the randomized name in the output folder
 
-blindedDf['Randomized Paths'] = pd.DataFrame(randomizedPaths) #appends the list of randomized paths to the current DataFrame
+blindedDf['Randomized_Paths'] = pd.DataFrame(randomizedPaths) #appends the list of randomized paths to the current DataFrame
 
 
 # Blind the data
 
-newList = list(zip(blindedDf['Original Paths'], blindedDf['Randomized Paths'])) #zipping the two columns from the dataFrame into a list of tuples 
+#applies the copyfile function to each row, using the two columns as input
+blindedDf.apply(lambda row: copyfile(row["Original_Paths"], row["Randomized_Paths"]), axis=1)
 
-#for each tuple pair, copy the original file to the randomized path
-for orig, randomized in newList:
-    copyfile(orig, randomized)
 
 # Export the key
 csvPath = os.path.join(output, 'blinded-key.csv') #create a path for the exported dataframe
