@@ -65,26 +65,6 @@ blindedDf['Original Names'] = pd.DataFrame(filenames)           #add the origina
 pd.set_option('display.max_colwidth', None)                     #sets to display the full column width
 ```
 
-
-```python
-display(blindedDf) #display the dataframe (info purposes only)
-```
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -146,25 +126,6 @@ blindedDf['Randomized Names'] = pd.DataFrame(randomizedNames) #adds a new column
 ```
 
 
-```python
-display(blindedDf) #display the dataFrame (info purposes only)
-```
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
