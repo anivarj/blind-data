@@ -3,8 +3,7 @@
 * This script should take a folder of .tif files and blind the data by creating a unique, 5-letter code for the file name and renaming the files. 
 * This script assumes you have python3 installed. 
 * This script needs the pandas package. If you do not have this package, please install via pip or conda: <br><br>
-> <code>conda install pandas</code><br>
-**TEST**
+> <code>conda install pandas</code>
 
 
 # Script rundown
