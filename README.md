@@ -8,11 +8,11 @@
 
 # Script rundown
 1. Choose your raw data location: can be in individual sub-folders or just copied into one parent folder
-2. Create the output folder called 'blinded'
-3. Make a dataframe of file paths and names
-4. Create a 5-letter random code-name for each file
-5. Blind the data and save to the output location
-6. Export the key
+2. Creates the output folder called 'blinded'
+3. Makes a dataframe of file paths and names
+4. Creates a 5-letter random code-name for each file
+5. Blinds the data and save to the output location
+6. Exports the key
 
 
 ## Example Key
